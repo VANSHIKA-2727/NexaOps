@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Brand Column */}
           <div>
-            <h3 className="font-display text-2xl font-bold mb-2">ProcureEdge</h3>
+            <h3 className="font-display text-2xl font-bold mb-2">NexaOps</h3>
             <p className="font-body theme-footer-text leading-relaxed">
               Transforming procurement strategies for Fortune 500 companies and emerging enterprises.
             </p>
@@ -88,7 +88,7 @@ export default function Footer() {
       <div className="border-t theme-footer-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="font-body theme-footer-copy text-center">
-            Copyright 2025 ProcureEdge. All Rights Reserved.
+            Copyright 2025 NexaOps. All Rights Reserved.
           </p>
         </div>
       </div>

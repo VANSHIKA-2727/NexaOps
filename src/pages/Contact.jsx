@@ -82,7 +82,7 @@ export default function Contact() {
     <main>
       <PageHeader
         title="Book a Consultation"
-        subtitle="Let's discuss how ProcureEdge can transform your operations."
+        subtitle="Let's discuss how NexaOps can transform your operations."
         breadcrumb="Contact"
       />
 

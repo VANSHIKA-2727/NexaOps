@@ -24,7 +24,7 @@ export default function Navbar({ theme, onToggleTheme }) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="font-display text-2xl font-bold theme-text-strong transition-colors hover:text-[var(--accent)]">
-            ProcureEdge
+            NexaOps
           </Link>
 
           {/* Desktop Navigation */}

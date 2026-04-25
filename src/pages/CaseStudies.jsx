@@ -58,7 +58,7 @@ export default function CaseStudies() {
     <main>
       <PageHeader
         title="Success Stories"
-        subtitle="Real results from enterprises transforming their operations with ProcureEdge."
+        subtitle="Real results from enterprises transforming their operations with NexaOps."
         breadcrumb="Case Studies"
       />
 

@@ -9,7 +9,7 @@ const industriesData = [
   },
   {
     name: 'FMCG',
-    description: 'Navigate complex distribution networks and rapid demand fluctuations. ProcureEdge enables FMCG companies to balance availability with cost efficiency.',
+    description: 'Navigate complex distribution networks and rapid demand fluctuations. NexaOps enables FMCG companies to balance availability with cost efficiency.',
     services: ['Logistics & Distribution', 'Inventory Management'],
   },
   {

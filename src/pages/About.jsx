@@ -19,7 +19,7 @@ export default function About() {
   return (
     <main>
       <PageHeader
-        title="About ProcureEdge"
+        title="About NexaOps"
         subtitle="The team and values behind India's procurement transformation partner."
         breadcrumb="About"
       />
