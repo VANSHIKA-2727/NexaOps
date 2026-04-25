@@ -5,8 +5,8 @@ export default function CaseCard({ industry, title, result, summary, isVisible =
         isVisible ? 'animate-fadeInUp' : ''
       }`}
       style={{
-        background: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--bdr)',
         borderRadius: '10px',
         padding: '28px 24px',
         display: 'flex',
@@ -63,7 +63,7 @@ export default function CaseCard({ industry, title, result, summary, isVisible =
       <div
         style={{
           paddingTop: '16px',
-          borderTop: '1px solid var(--border)',
+          borderTop: '1px solid var(--bdr)',
         }}
       >
         <span

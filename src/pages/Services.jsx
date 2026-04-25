@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 import { useInView } from '../hooks/useInView';
 
 const servicesData = [
@@ -104,17 +105,14 @@ export default function Services() {
   const [solutionsRef, solutionsInView] = useInView();
 
   return (
-    <main className="pt-16">
-      <section className="page-hero py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title mb-4 font-display text-5xl font-bold">Our Services</h1>
-          <p className="page-hero__copy max-w-2xl font-body text-xl">
-            Comprehensive procurement and supply chain solutions tailored to your strategic objectives.
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHeader
+        title="Our Services"
+        subtitle="Comprehensive procurement and supply chain solutions tailored to your strategic objectives."
+        breadcrumb="Services"
+      />
 
-      <div ref={servicesRef} className="theme-surface section-card-stack">
+      <div ref={servicesRef} className="theme-surface" style={{ borderBottom: '1px solid var(--bdr)' }}>
         {servicesData.map((service, index) => (
           <div key={service.abbr}>
             <section className="py-16">
@@ -198,8 +196,8 @@ export default function Services() {
                           <span
                             key={metric}
                             style={{
-                              background: 'var(--bg-surface)',
-                              border: '1px solid var(--border)',
+                              background: 'var(--bg-card)',
+                              border: '1px solid var(--bdr)',
                               borderRadius: '999px',
                               padding: '4px 14px',
                               fontSize: '0.78rem',
@@ -226,7 +224,7 @@ export default function Services() {
         ))}
       </div>
 
-      <section ref={solutionsRef} className="theme-surface-muted py-section section-card-stack">
+      <section ref={solutionsRef} className="theme-surface-muted py-16" style={{ borderBottom: '1px solid var(--bdr)' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-12 max-w-3xl text-center">
             <p className="mb-3 font-body text-sm font-semibold uppercase tracking-[0.24em] text-accent-600 dark:text-accent-300">
@@ -248,8 +246,8 @@ export default function Services() {
                   solutionsInView ? 'animate-fadeInUp' : ''
                 }`}
                 style={{
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border)',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--bdr)',
                   borderRadius: '10px',
                   padding: '28px 24px',
                   transition: 'box-shadow 0.2s ease, transform 0.2s ease',
@@ -288,6 +286,15 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      <div style={{ textAlign: 'center', padding: '48px 0', borderTop: '1px solid var(--bdr)' }}>
+        <p style={{ color: 'var(--tx-muted)', marginBottom: '16px', fontSize: '0.9rem' }}>
+          Not sure which service fits your need?
+        </p>
+        <Link to="/contact">
+          <button className="btn btn-primary">Talk to an Expert →</button>
+        </Link>
+      </div>
     </main>
   );
 }

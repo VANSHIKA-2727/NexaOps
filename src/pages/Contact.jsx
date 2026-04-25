@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import Button from '../components/Button';
+import PageHeader from '../components/PageHeader';
 
 const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
 const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
@@ -69,7 +70,7 @@ export default function Contact() {
         message: '',
       });
 
-      window.setTimeout(() => navigate('/dashboard'), 1500);
+      window.setTimeout(() => navigate('/dashboard'), 1800);
     } catch (submissionError) {
       setError('Failed to send. Please try again or email us directly.');
     } finally {
@@ -78,17 +79,14 @@ export default function Contact() {
   };
 
   return (
-    <main className="pt-16">
-      <section className="page-hero py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title mb-4 font-display text-5xl font-bold">Free Consultation</h1>
-          <p className="page-hero__copy font-body text-xl">
-            Tell us what’s slowing your supply chain down and we’ll map the next move.
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHeader
+        title="Book a Consultation"
+        subtitle="Let's discuss how ProcureEdge can transform your operations."
+        breadcrumb="Contact"
+      />
 
-      <section className="theme-surface py-section section-card-stack">
+      <section className="theme-surface py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
             <div>

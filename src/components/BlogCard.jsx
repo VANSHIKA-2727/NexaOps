@@ -5,8 +5,8 @@ export default function BlogCard({ title, date, category, excerpt, slug, readTim
     <div
       className="blog-card"
       style={{
-        background: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--bdr)',
         borderRadius: '10px',
         padding: '28px 24px',
         display: 'flex',
@@ -63,7 +63,7 @@ export default function BlogCard({ title, date, category, excerpt, slug, readTim
         {excerpt}
       </p>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid var(--border)', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid var(--bdr)', gap: '12px' }}>
         {readTime && (
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{readTime}</span>
         )}

@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import CaseCard from '../components/CaseCard';
+import PageHeader from '../components/PageHeader';
 import { useInView } from '../hooks/useInView';
 
 const caseStudiesData = [
@@ -53,18 +55,14 @@ export default function CaseStudies() {
     : caseStudiesData.filter(c => c.industry.includes(activeFilter));
 
   return (
-    <main className="pt-16">
-      {/* Hero Section */}
-      <section className="page-hero py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title font-display text-5xl font-bold mb-4">Success Stories</h1>
-          <p className="page-hero__copy font-body text-xl">
-            Real results from enterprises transforming their operations
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHeader
+        title="Success Stories"
+        subtitle="Real results from enterprises transforming their operations with ProcureEdge."
+        breadcrumb="Case Studies"
+      />
 
-      <section className="theme-surface section-card-stack border-b theme-border py-8">
+      <section className="theme-surface border-b theme-border py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-3">
             {filters.map((filter) => (
@@ -85,7 +83,7 @@ export default function CaseStudies() {
       </section>
 
       {/* Case Studies Grid */}
-      <section ref={casesRef} className="py-section theme-surface-muted section-card-stack">
+      <section ref={casesRef} className="py-12 theme-surface-muted" style={{ borderBottom: '1px solid var(--bdr)' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredCases.map((caseStudy, idx) => (
@@ -100,13 +98,21 @@ export default function CaseStudies() {
               />
             ))}
           </div>
+          <div style={{ textAlign: 'center', padding: '32px 0 0' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.18rem', fontWeight: 700, color: 'var(--tx-primary)', marginBottom: '10px' }}>
+              Want results like these?
+            </p>
+            <Link to="/contact">
+              <button className="btn btn-primary">Start a Conversation →</button>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Methodology Strip */}
-      <section ref={methodRef} className="theme-surface border-y theme-border py-section section-card-stack">
+      <section ref={methodRef} className="theme-surface border-y theme-border py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-3xl font-bold theme-text-strong mb-12 text-center">
+          <h2 className="font-display text-3xl font-bold theme-text-strong mb-8 text-center">
             Our Methodology
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -143,7 +149,7 @@ export default function CaseStudies() {
                 <h3 className="font-display text-lg font-bold theme-text-strong mb-2">
                   {phase.name}
                 </h3>
-                <p className="font-body theme-text-muted text-sm">
+                <p className="font-body theme-text-secondary text-sm">
                   {phase.description}
                 </p>
               </div>

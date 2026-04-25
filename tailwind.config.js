@@ -47,12 +47,12 @@ export default {
         "off-white": "#F8F9FB",
       },
       fontFamily: {
-        display: ['"Syne"', 'sans-serif'],
+        display: ['"DM Sans"', 'sans-serif'],
         body: ['"DM Sans"', 'sans-serif'],
         sans: ['"DM Sans"', 'sans-serif'],
       },
       spacing: {
-        section: "7rem",
+        section: "4rem",
       },
       typography: {
         DEFAULT: {
@@ -70,15 +70,15 @@ export default {
               fontWeight: "700",
             },
             h1: {
-              fontFamily: '"Syne"',
+              fontFamily: '"DM Sans"',
               fontWeight: "700",
             },
             h2: {
-              fontFamily: '"Syne"',
+              fontFamily: '"DM Sans"',
               fontWeight: "700",
             },
             h3: {
-              fontFamily: '"Syne"',
+              fontFamily: '"DM Sans"',
               fontWeight: "700",
             },
           },

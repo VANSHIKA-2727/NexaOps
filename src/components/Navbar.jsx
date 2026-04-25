@@ -55,9 +55,7 @@ export default function Navbar({ theme, onToggleTheme }) {
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               aria-pressed={theme === 'dark'}
             >
-              <span className="theme-toggle__icon" aria-hidden="true">
-                {theme === 'dark' ? '☀' : '☾'}
-              </span>
+             
               <span className="theme-toggle__label">
                 {theme === 'dark' ? 'Light' : 'Dark'}
               </span>

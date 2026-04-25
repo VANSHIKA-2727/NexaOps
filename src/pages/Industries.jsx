@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
+
 const industriesData = [
   {
     name: 'Manufacturing',
@@ -33,69 +36,41 @@ const industriesData = [
 
 export default function Industries() {
   return (
-    <main className="pt-16">
-      {/* Hero Section */}
-      <section className="page-hero py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title font-display text-5xl font-bold mb-4">Industry Solutions</h1>
-          <p className="page-hero__copy font-body text-xl">
-            Sector-specific expertise addressing your unique challenges
-          </p>
-        </div>
-      </section>
-
-      <section className="py-section section-card-stack">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {industriesData.map((industry, idx) => (
-            <div
-              key={idx}
-              className={`${idx % 2 === 0 ? 'theme-surface' : 'theme-surface-muted'} rounded-[1.75rem] border theme-border px-6`}
-            >
-              <div className="py-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-                  {/* Left: Accent Bar + Content */}
-                  <div className="md:col-span-2">
-                    <div className="flex gap-4 mb-4">
-                      <div className="w-1 bg-accent-500 rounded-full"></div>
-                      <div className="flex-grow">
-                        <h3 className="font-display text-3xl font-bold theme-text-strong mb-4">
-                          {industry.name}
-                        </h3>
-                        <p className="font-body theme-text-muted leading-relaxed mb-6">
-                          {industry.description}
-                        </p>
-                        <div>
-                          <p className="font-body text-sm font-semibold theme-text-muted mb-3">
-                            Key Services
-                          </p>
-                          <div className="flex flex-wrap gap-3">
-                            {industry.services.map((service, i) => (
-                              <span
-                                key={i}
-                                className="theme-chip font-body text-sm px-4 py-2 rounded-full"
-                              >
-                                {service}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right: Image Placeholder */}
-                  <div className="theme-highlight-panel rounded-[1.25rem] h-64 flex items-center justify-center p-8">
-                    <div className="text-center">
-                      <p className="font-display text-4xl font-bold theme-text-strong mb-3">{industry.name.slice(0, 3).toUpperCase()}</p>
-                      <p className="theme-text-secondary font-body text-sm leading-7">
-                        Operational playbooks tailored for supplier performance, flow stability, and procurement resilience.
-                      </p>
-                    </div>
-                  </div>
+    <main>
+      <PageHeader
+        title="Industry Solutions"
+        subtitle="Sector-specific expertise addressing your unique operational challenges."
+        breadcrumb="Industries"
+      />
+      <section style={{ padding: '48px 32px', background: 'var(--bg-section)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '18px', marginBottom: '32px' }}>
+            {industriesData.map((industry) => (
+              <div key={industry.name} style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '28px 24px' }}>
+                <div style={{ width: '32px', height: '3px', background: 'var(--ac)', borderRadius: '2px', marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: 'var(--tx-primary)', marginBottom: '10px' }}>{industry.name}</h3>
+                <p style={{ fontSize: '0.875rem', color: 'var(--tx-body)', lineHeight: 1.7, marginBottom: '16px' }}>{industry.description}</p>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+                  {industry.services.map((service) => (
+                    <span key={service} className="theme-chip" style={{ fontSize: '0.72rem' }}>
+                      {service}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+                  <Link to="/services" className="theme-chip">Services</Link>
+                  <Link to="/contact" style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--ac)' }}>
+                    Get started →
+                  </Link>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <Link to="/contact">
+              <button className="btn btn-primary">Discuss Your Industry →</button>
+            </Link>
+          </div>
         </div>
       </section>
     </main>

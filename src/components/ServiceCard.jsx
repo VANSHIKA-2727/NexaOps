@@ -5,8 +5,8 @@ export default function ServiceCard({ title, description, icon, isVisible = fals
         isVisible ? 'animate-fadeInUp' : ''
       }`}
       style={{
-        background: 'var(--bg-surface)',
-        border: '1px solid var(--border)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--bdr)',
         borderRadius: '10px',
         padding: '28px 24px',
         transition: 'box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease',

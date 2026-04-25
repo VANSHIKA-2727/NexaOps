@@ -1,375 +1,234 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const initialCalculatorState = {
-  freightKm: 18000,
-  supplierVisits: 16,
-  localSupplierPct: 62,
-  loadFactor: 74,
+const engagements = [
+  { project: 'Supply Chain Audit — Acme Corp', service: 'Supply Chain Management', status: 'In Progress', date: 'Mar 15, 2025' },
+  { project: 'Vendor Optimization — TechForce', service: 'Vendor Development', status: 'In Progress', date: 'Feb 01, 2025' },
+  { project: 'Procurement Strategy — Global Industries', service: 'Procurement Strategy', status: 'Completed', date: 'Dec 10, 2024' },
+  { project: 'Six Sigma Initiative — Manufacturing Plus', service: 'Process Excellence', status: 'Scheduled', date: 'May 01, 2025' },
+  { project: 'ESG Assessment — Retail Solutions', service: 'ESG & Sustainability', status: 'In Progress', date: 'Mar 20, 2025' },
+];
+
+const statusStyle = {
+  'In Progress': { bg: 'rgba(29,111,164,0.1)', color: '#1D6FA4' },
+  Completed: { bg: 'rgba(29,111,164,0.12)', color: '#155d8a' },
+  Scheduled: { bg: 'rgba(11,31,58,0.08)', color: '#5A6B7A' },
 };
 
-export default function Dashboard() {
-  const userName = 'Rahul S.';
-  const [calculatorInput, setCalculatorInput] = useState(initialCalculatorState);
-  const [score, setScore] = useState(74);
+function ESGCalculator() {
+  const [inputs, setInputs] = useState({ energy: 5000, trips: 200, diversity: 50, recycling: 60 });
+  const [result, setResult] = useState(null);
 
-  const statCards = [
-    { label: 'Active Projects', value: '3', icon: '📊' },
-    { label: 'Pending Reports', value: '1', icon: '📋' },
-    { label: 'ESG Score', value: '74', icon: '🌐' },
-    { label: 'Next Meeting', value: 'Apr 28', icon: '📅' },
+  const update = (key, value) => setInputs((previous) => ({ ...previous, [key]: Number(value) }));
+
+  const calculate = () => {
+    const energyScore = Math.max(0, 100 - inputs.energy / 100);
+    const tripScore = Math.max(0, 100 - inputs.trips / 3);
+    const total = Math.round(energyScore * 0.3 + tripScore * 0.2 + inputs.diversity * 0.25 + inputs.recycling * 0.25);
+    const rating = total >= 70 ? 'Good' : total >= 40 ? 'Fair' : 'Needs Work';
+    const recommendations = [];
+
+    if (energyScore < 60) recommendations.push('Switch to renewable energy sources and audit high-consumption assets.');
+    if (tripScore < 60) recommendations.push('Consolidate shipments and optimise delivery routes to reduce trip count.');
+    if (inputs.diversity < 50) recommendations.push('Expand supplier diversity program — target 60%+ diverse spend.');
+    if (inputs.recycling < 50) recommendations.push('Establish formal waste-diversion targets with your logistics partners.');
+
+    setResult({ total, rating, recs: recommendations.slice(0, 3) });
+  };
+
+  const sliders = [
+    { key: 'energy', label: 'Monthly Energy Consumption', unit: 'kWh', min: 0, max: 20000, step: 500, value: inputs.energy },
+    { key: 'trips', label: 'Logistics Trips / Month', unit: 'trips', min: 0, max: 1000, step: 10, value: inputs.trips },
+    { key: 'diversity', label: 'Supplier Diversity Score', unit: '/100', min: 0, max: 100, step: 5, value: inputs.diversity },
+    { key: 'recycling', label: 'Waste Recycling Rate', unit: '%', min: 0, max: 100, step: 5, value: inputs.recycling },
   ];
-
-  const engagements = [
-    {
-      project: 'Supply Chain Audit - Acme Corp',
-      service: 'Supply Chain Management',
-      status: 'In Progress',
-      startDate: 'Mar 15, 2025',
-    },
-    {
-      project: 'Vendor Optimisation - TechForce',
-      service: 'Vendor Development',
-      status: 'In Progress',
-      startDate: 'Feb 01, 2025',
-    },
-    {
-      project: 'Procurement Strategy - Global Industries',
-      service: 'Procurement Strategy',
-      status: 'Completed',
-      startDate: 'Dec 10, 2024',
-    },
-    {
-      project: 'Six Sigma Initiative - Manufacturing Plus',
-      service: 'Process Excellence',
-      status: 'Scheduled',
-      startDate: 'May 01, 2025',
-    },
-    {
-      project: 'ESG Assessment - Retail Solutions',
-      service: 'ESG & Sustainability',
-      status: 'In Progress',
-      startDate: 'Mar 20, 2025',
-    },
-  ];
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Completed':
-        return 'theme-status-completed';
-      case 'In Progress':
-        return 'theme-status-progress';
-      case 'Scheduled':
-        return 'theme-status-scheduled';
-      default:
-        return 'theme-status-default';
-    }
-  };
-
-  const scoreMeta = useMemo(() => {
-    if (score >= 80) {
-      return {
-        label: 'Excellent',
-        stroke: '#1D6FA4',
-        textColor: 'var(--accent)',
-      };
-    }
-
-    if (score >= 60) {
-      return {
-        label: 'Good',
-        stroke: '#2A85BC',
-        textColor: '#2A85BC',
-      };
-    }
-
-    if (score >= 40) {
-      return {
-        label: 'Needs Improvement',
-        stroke: '#35577D',
-        textColor: 'var(--text-secondary)',
-      };
-    }
-
-    return {
-      label: 'Critical',
-      stroke: '#0B1F3A',
-      textColor: 'var(--text-primary)',
-    };
-  }, [score]);
-
-  const recommendations = useMemo(() => {
-    const tips = [];
-
-    if (calculatorInput.freightKm > 25000) {
-      tips.push('Reduce annual freight exposure by consolidating lane planning and rebalancing distribution hubs.');
-    }
-    if (calculatorInput.localSupplierPct < 50) {
-      tips.push('Expand local supplier coverage to lower logistics emissions and improve response time.');
-    }
-    if (calculatorInput.supplierVisits > 18) {
-      tips.push('Shift routine supplier reviews to remote governance and reserve travel for critical interventions.');
-    }
-    if (calculatorInput.loadFactor < 70) {
-      tips.push('Improve truck load factor through shipment consolidation and route scheduling discipline.');
-    }
-
-    return tips.slice(0, 3).length > 0
-      ? tips.slice(0, 3)
-      : [
-          'Maintain the current supplier mix and keep improving local sourcing maturity.',
-          'Continue optimising freight routes to preserve carbon efficiency gains.',
-          'Track load factor weekly so transport efficiency stays visible to operations teams.',
-        ];
-  }, [calculatorInput]);
-
-  const circumference = 2 * Math.PI * 54;
-  const dashOffset = circumference - (score / 100) * circumference;
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setCalculatorInput((current) => ({
-      ...current,
-      [name]: Number(value),
-    }));
-  };
-
-  const handleCalculate = () => {
-    const nextScore = 100
-      - calculatorInput.freightKm / 1000
-      + calculatorInput.localSupplierPct * 0.3
-      - calculatorInput.supplierVisits * 0.5
-      + calculatorInput.loadFactor * 0.2;
-
-    setScore(Math.max(0, Math.min(100, Math.round(nextScore))));
-  };
 
   return (
-    <main className="min-h-screen pt-16 theme-surface-muted">
-      <section className="theme-surface section-card-stack border-b theme-border">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="mb-2 font-display text-4xl font-bold theme-text-strong">
-            Client Portal
-          </h1>
-          <p className="font-body text-lg theme-text-secondary">
-            Welcome, {userName}
-          </p>
-        </div>
-      </section>
+    <div>
+      <p style={{ fontSize: '0.875rem', color: 'var(--tx-muted)', marginBottom: '32px', lineHeight: 1.65 }}>
+        Adjust the sliders to reflect your operations. Your ESG score updates instantly and provides actionable recommendations.
+      </p>
 
-      <section className="section-card-stack py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-            {statCards.map((card) => (
-              <article
-                key={card.label}
-                className="theme-card rounded-3xl p-6 transition-shadow duration-300 hover:shadow-md"
-              >
-                <div className="mb-3 flex items-start justify-between">
-                  <span className="text-3xl">{card.icon}</span>
-                </div>
-                <p className="mb-2 font-body text-sm theme-text-secondary">{card.label}</p>
-                <p className="font-display text-3xl font-bold theme-text-strong">{card.value}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-card-stack pb-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="theme-card overflow-hidden rounded-3xl">
-            <div className="border-b theme-border px-6 py-6">
-              <h2 className="font-display text-2xl font-bold theme-text-strong">
-                Recent Engagements
-              </h2>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', marginBottom: '28px' }}>
+        {sliders.map((slider) => (
+          <div key={slider.key}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--tx-body)' }}>{slider.label}</label>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ac)' }}>{slider.value} {slider.unit}</span>
             </div>
+            <input
+              type="range"
+              min={slider.min}
+              max={slider.max}
+              step={slider.step}
+              value={slider.value}
+              onChange={(event) => update(slider.key, event.target.value)}
+              style={{ width: '100%', accentColor: 'var(--ac)' }}
+            />
+          </div>
+        ))}
+      </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
+      <button onClick={calculate} className="btn btn-primary" style={{ width: '100%', padding: '12px' }}>
+        Calculate ESG Score
+      </button>
+
+      {result && (
+        <div style={{ marginTop: '28px', padding: '28px', background: 'var(--ac-tint)', border: '1px solid var(--ac-border)', borderRadius: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '3.2rem', fontWeight: 800, color: 'var(--ac)', lineHeight: 1 }}>{result.total}</p>
+              <p style={{ fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--tx-muted)', marginTop: '4px' }}>ESG Score</p>
+            </div>
+            <div>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.3rem', fontWeight: 700, color: 'var(--tx-primary)', marginBottom: '4px' }}>{result.rating}</p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--tx-muted)' }}>Out of 100 — based on your inputs</p>
+            </div>
+          </div>
+          {result.recs.length > 0 && (
+            <>
+              <p style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--tx-muted)', marginBottom: '12px' }}>
+                Recommendations
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {result.recs.map((recommendation) => (
+                  <li key={recommendation} style={{ fontSize: '0.855rem', color: 'var(--tx-body)', paddingLeft: '16px', borderLeft: '2px solid var(--ac)', lineHeight: 1.6 }}>
+                    {recommendation}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const [tab, setTab] = useState('overview');
+
+  const statCards = [
+    { label: 'Active Projects', value: '3', icon: 'AP' },
+    { label: 'Pending Reports', value: '1', icon: 'PR' },
+    { label: 'ESG Score', value: '74', icon: 'ESG' },
+    { label: 'Next Meeting', value: 'Apr 28', icon: 'MTG' },
+  ];
+
+  const tabs = [
+    { key: 'overview', label: 'Engagements' },
+    { key: 'esg', label: 'ESG Calculator' },
+    { key: 'actions', label: 'Quick Actions' },
+  ];
+
+  const actions = [
+    { label: 'Book a Consultation', sub: 'Speak with a supply chain expert', path: '/contact', cta: 'Schedule Now' },
+    { label: 'Browse Services', sub: 'Explore our full capability set', path: '/services', cta: 'View Services' },
+    { label: 'Read Case Studies', sub: "See results we've delivered", path: '/case-studies', cta: 'View Stories' },
+  ];
+
+  return (
+    <main style={{ background: 'var(--bg-page)', minHeight: '100vh', paddingTop: '64px' }}>
+      <div style={{ background: 'var(--bg-dark)', padding: '32px', paddingTop: '40px', borderBottom: '1px solid rgba(242,240,236,0.08)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <p style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--ac)', marginBottom: '6px' }}>Client Portal</p>
+          <h1 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '2rem', fontWeight: 800, color: 'var(--tx-light)', marginBottom: '4px' }}>Welcome back, Rahul S.</h1>
+          <p style={{ color: 'var(--tx-light-dim)', fontSize: '0.9rem' }}>Here&apos;s a snapshot of your active engagements and performance metrics.</p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+          {statCards.map((card) => (
+            <div key={card.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '20px 22px' }}>
+              <div style={{ width: '34px', height: '34px', background: 'var(--ac-tint)', border: '1px solid var(--ac-border)', borderRadius: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', fontWeight: 800, color: 'var(--ac)', letterSpacing: '0.03em', marginBottom: '14px', fontFamily: 'DM Sans, sans-serif' }}>
+                {card.icon}
+              </div>
+              <p style={{ fontSize: '0.78rem', color: 'var(--tx-muted)', marginBottom: '4px' }}>{card.label}</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.8rem', fontWeight: 800, color: 'var(--tx-primary)', lineHeight: 1 }}>{card.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-alt)', borderRadius: '8px', padding: '4px', marginBottom: '28px', width: 'fit-content' }}>
+          {tabs.map((item) => (
+            <button
+              key={item.key}
+              onClick={() => setTab(item.key)}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '6px',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                background: tab === item.key ? 'var(--bg-card)' : 'transparent',
+                color: tab === item.key ? 'var(--tx-primary)' : 'var(--tx-muted)',
+                boxShadow: tab === item.key ? 'var(--sh-sm)' : 'none',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'overview' && (
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', overflow: 'hidden' }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--bdr)' }}>
+              <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.05rem', fontWeight: 700, color: 'var(--tx-primary)' }}>Active Engagements</h2>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr className="theme-table-head border-b theme-border">
-                    <th className="px-6 py-4 text-left font-body font-semibold theme-text-secondary">
-                      Project Name
-                    </th>
-                    <th className="px-6 py-4 text-left font-body font-semibold theme-text-secondary">
-                      Service
-                    </th>
-                    <th className="px-6 py-4 text-left font-body font-semibold theme-text-secondary">
-                      Status
-                    </th>
-                    <th className="px-6 py-4 text-left font-body font-semibold theme-text-secondary">
-                      Start Date
-                    </th>
+                  <tr style={{ background: 'var(--bg-alt)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--tx-muted)' }}>
+                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Project</th>
+                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Service</th>
+                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Status</th>
+                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Started</th>
                   </tr>
                 </thead>
                 <tbody>
                   {engagements.map((engagement) => (
-                    <tr key={engagement.project} className="theme-table-row border-b theme-border">
-                      <td className="px-6 py-4 font-body theme-text-strong">{engagement.project}</td>
-                      <td className="px-6 py-4 font-body theme-text-secondary">{engagement.service}</td>
-                      <td className="px-6 py-4">
-                        <span className={`font-body text-sm font-semibold ${getStatusColor(engagement.status)}`}>
+                    <tr key={engagement.project} style={{ borderBottom: '1px solid var(--bdr)', fontSize: '0.875rem' }}>
+                      <td style={{ padding: '16px 24px', color: 'var(--tx-primary)', fontWeight: 500 }}>{engagement.project}</td>
+                      <td style={{ padding: '16px 24px', color: 'var(--tx-muted)' }}>{engagement.service}</td>
+                      <td style={{ padding: '16px 24px' }}>
+                        <span style={{ background: statusStyle[engagement.status].bg, color: statusStyle[engagement.status].color, padding: '3px 12px', borderRadius: '999px', fontSize: '0.78rem', fontWeight: 600 }}>
                           {engagement.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 font-body theme-text-secondary">{engagement.startDate}</td>
+                      <td style={{ padding: '16px 24px', color: 'var(--tx-muted)' }}>{engagement.date}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
-      </section>
+        )}
 
-      <section className="section-card-stack pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_0.85fr]">
-            <div className="theme-card rounded-[2rem] p-8">
-              <div className="mb-8">
-                <p className="mb-3 font-body text-sm font-semibold uppercase tracking-[0.24em] text-accent-600 dark:text-accent-300">
-                  ESG Supply Chain Report
-                </p>
-                <h2 className="font-display text-3xl font-bold theme-text-strong">
-                  ESG Carbon Calculator
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label htmlFor="freightKm" className="mb-2 block font-body font-medium theme-text-secondary">
-                    Annual freight distance (km)
-                  </label>
-                  <input
-                    id="freightKm"
-                    name="freightKm"
-                    type="number"
-                    value={calculatorInput.freightKm}
-                    onChange={handleChange}
-                    className="theme-input w-full rounded-xl px-4 py-3 font-body"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="supplierVisits" className="mb-2 block font-body font-medium theme-text-secondary">
-                    Supplier visits per year
-                  </label>
-                  <input
-                    id="supplierVisits"
-                    name="supplierVisits"
-                    type="number"
-                    value={calculatorInput.supplierVisits}
-                    onChange={handleChange}
-                    className="theme-input w-full rounded-xl px-4 py-3 font-body"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <div className="mb-2 flex items-center justify-between font-body font-medium theme-text-secondary">
-                    <label htmlFor="localSupplierPct">Local supplier mix</label>
-                    <span>{calculatorInput.localSupplierPct}% local</span>
-                  </div>
-                  <input
-                    id="localSupplierPct"
-                    name="localSupplierPct"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={calculatorInput.localSupplierPct}
-                    onChange={handleChange}
-                    className="theme-range h-2 w-full cursor-pointer appearance-none rounded-full"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <div className="mb-2 flex items-center justify-between font-body font-medium theme-text-secondary">
-                    <label htmlFor="loadFactor">Average truck load factor</label>
-                    <span>{calculatorInput.loadFactor}%</span>
-                  </div>
-                  <input
-                    id="loadFactor"
-                    name="loadFactor"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={calculatorInput.loadFactor}
-                    onChange={handleChange}
-                    className="theme-range h-2 w-full cursor-pointer appearance-none rounded-full"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleCalculate}
-                className="btn btn-primary mt-8"
-              >
-                Calculate ESG Score
-              </button>
-            </div>
-
-            <div className="theme-card rounded-[2rem] p-8">
-              <div className="flex flex-col items-center text-center">
-                <svg viewBox="0 0 140 140" className="mb-6 h-44 w-44">
-                  <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(29,111,164,0.12)" strokeWidth="10" />
-                  <circle
-                    cx="70"
-                    cy="70"
-                    r="54"
-                    fill="none"
-                    stroke={scoreMeta.stroke}
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={dashOffset}
-                    transform="rotate(-90 70 70)"
-                  />
-                  <text
-                    x="50%"
-                    y="48%"
-                    textAnchor="middle"
-                    style={{ fill: 'var(--text-primary)', fontFamily: 'var(--display)', fontSize: '1.6rem', fontWeight: 700 }}
-                  >
-                    {score}
-                  </text>
-                  <text
-                    x="50%"
-                    y="63%"
-                    textAnchor="middle"
-                    style={{ fill: 'var(--accent)', fontFamily: 'var(--sans)', fontSize: '0.62rem', letterSpacing: '0.22em', textTransform: 'uppercase' }}
-                  >
-                    ESG Score
-                  </text>
-                </svg>
-
-                <p className="mb-2 font-display text-2xl font-bold" style={{ color: scoreMeta.textColor }}>
-                  {scoreMeta.label}
-                </p>
-                <p className="mb-8 font-body theme-text-secondary">
-                  Simulated score based on logistics intensity, supplier proximity, visits, and truck utilisation.
-                </p>
-
-                <div
-                  className="w-full rounded-[1.5rem] p-6 text-left"
-                  style={{ background: 'var(--accent-light)', border: '1px solid var(--accent-border)' }}
-                >
-                  <h3 className="mb-4 font-display text-xl font-bold theme-text-strong">
-                    Improvement recommendations
-                  </h3>
-                  <ul className="space-y-3">
-                    {recommendations.map((recommendation) => (
-                      <li key={recommendation} className="flex gap-3 font-body leading-7 theme-text-secondary">
-                        <span className="text-accent-500">→</span>
-                        <span>{recommendation}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+        {tab === 'esg' && (
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '28px 32px' }}>
+            <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--tx-primary)', marginBottom: '4px' }}>ESG Performance Estimator</h2>
+            <ESGCalculator />
           </div>
-        </div>
-      </section>
+        )}
+
+        {tab === 'actions' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+            {actions.map((action) => (
+              <div key={action.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '24px' }}>
+                <div style={{ width: '32px', height: '3px', background: 'var(--ac)', borderRadius: '2px', marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--tx-primary)', marginBottom: '8px' }}>{action.label}</h3>
+                <p style={{ fontSize: '0.845rem', color: 'var(--tx-muted)', marginBottom: '20px', lineHeight: 1.6 }}>{action.sub}</p>
+                <Link to={action.path}>
+                  <button className="btn btn-outline" style={{ fontSize: '0.82rem', padding: '7px 16px' }}>{action.cta} →</button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }

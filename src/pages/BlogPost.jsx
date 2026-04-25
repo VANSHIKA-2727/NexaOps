@@ -25,7 +25,7 @@ export default function BlogPost() {
           ← Back to Insights
         </Link>
 
-        <div className="mb-8 rounded-[2rem] border theme-border bg-[var(--bg-surface)] p-8 shadow-[var(--shadow-sm)]">
+        <div className="mb-8 rounded-[2rem] border theme-border bg-[var(--bg-card)] p-8 shadow-[var(--shadow-sm)]">
           <span className="mb-4 inline-flex rounded-full border px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.18em] theme-chip">
             {blog.category}
           </span>
@@ -35,7 +35,7 @@ export default function BlogPost() {
           </p>
         </div>
 
-        <div className="rounded-[2rem] border theme-border bg-[var(--bg-surface)] p-8 shadow-[var(--shadow-sm)]">
+        <div className="rounded-[2rem] border theme-border bg-[var(--bg-card)] p-8 shadow-[var(--shadow-sm)]">
           <p className="mb-8 font-body text-lg leading-8 theme-text-secondary">
             {blog.excerpt}
           </p>

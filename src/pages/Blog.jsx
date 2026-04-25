@@ -1,25 +1,24 @@
+import { Link } from 'react-router-dom';
 import BlogCard from '../components/BlogCard';
+import PageHeader from '../components/PageHeader';
 import { staticBlogs } from '../data/blogs';
 
 export default function Blog() {
   const recentPosts = staticBlogs.slice(0, 3);
 
   return (
-    <main className="pt-16">
-      <section className="page-hero py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title mb-4 font-display text-5xl font-bold">Insights & Articles</h1>
-          <p className="page-hero__copy font-body text-xl">
-            Expert perspectives on procurement, supply chain, Six Sigma, and ESG-led transformation.
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHeader
+        title="Insights & Articles"
+        subtitle="Expert perspectives on procurement, supply chain, and business transformation."
+        breadcrumb="Blog"
+      />
 
-      <section className="theme-surface-muted py-section section-card-stack">
+      <section className="theme-surface-muted py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             <aside className="lg:col-span-1">
-              <div className="theme-card rounded-3xl p-6 mb-8">
+              <div className="theme-card rounded-3xl p-6 mb-6">
                 <h3 className="mb-4 font-display text-lg font-bold theme-text-strong">
                   Categories
                 </h3>
@@ -36,10 +35,12 @@ export default function Blog() {
                 <h3 className="mb-4 font-display text-lg font-bold theme-text-strong">
                   Recent Posts
                 </h3>
-                <ul className="space-y-4 font-body text-sm theme-text-secondary">
+                <ul className="space-y-3 font-body text-sm theme-text-secondary">
                   {recentPosts.map((post) => (
-                    <li key={post.slug} className="border-b theme-border pb-4 last:border-b-0 last:pb-0">
-                      <p className="font-semibold theme-text-strong">{post.title}</p>
+                    <li key={post.slug} className="border-b theme-border pb-3 last:border-b-0 last:pb-0">
+                      <Link to={`/blog/${post.slug}`} className="font-semibold theme-text-strong transition-colors hover:text-[var(--ac)]">
+                        {post.title}
+                      </Link>
                       <p className="mt-1 theme-text-muted">{post.readTime}</p>
                     </li>
                   ))}
@@ -48,7 +49,7 @@ export default function Blog() {
             </aside>
 
             <div className="lg:col-span-3">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {staticBlogs.map((blog) => (
                   <BlogCard
                     key={blog.slug}

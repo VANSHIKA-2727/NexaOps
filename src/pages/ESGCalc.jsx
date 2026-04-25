@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { submitEsgData } from '../api/esg';
 import Button from '../components/Button';
+import PageHeader from '../components/PageHeader';
 
 export default function ESGCalc() {
   const [formData, setFormData] = useState({
@@ -102,19 +103,14 @@ export default function ESGCalc() {
   };
 
   return (
-    <main className="pt-16">
-      {/* Hero Section */}
-      <section className="page-hero py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="page-hero__title font-display text-5xl font-bold mb-4">ESG Performance Estimator</h1>
-          <p className="page-hero__copy font-body text-xl">
-            Get a baseline diagnostic of your environmental and social governance maturity
-          </p>
-        </div>
-      </section>
+    <main>
+      <PageHeader
+        title="ESG Performance Estimator"
+        subtitle="Get a baseline diagnostic of your environmental and social governance maturity."
+        breadcrumb="ESG Calculator"
+      />
 
-      {/* Calculator */}
-      <section className="py-section theme-surface-muted section-card-stack">
+      <section className="py-16 theme-surface-muted">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="theme-card rounded-lg p-8">
             <div className="space-y-8">
