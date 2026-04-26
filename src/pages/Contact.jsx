@@ -4,10 +4,9 @@ import emailjs from '@emailjs/browser';
 import Button from '../components/Button';
 import PageHeader from '../components/PageHeader';
 
-const EMAILJS_SERVICE_ID       = 'service_qytfwkj';
-const EMAILJS_TEMPLATE_CONFIRM = 'template_4tzqfiw';
-const EMAILJS_PUBLIC_KEY       = 'V9icJlAO1rdyL5WTU';
-
+const EMAILJS_SERVICE_ID = 'service_f3bcrxf';
+const EMAILJS_TEMPLATE_CONFIRM = 'template_4tzqfiw';  // confirmation → goes to client
+const EMAILJS_PUBLIC_KEY = 'OCy0eyV5hDCs83Ujq';
 
 const services = [
   'Supply Chain Management',
@@ -48,23 +47,16 @@ export default function Contact() {
 
     try {
       const payload = {
-        from_name:  formData.fullName,
+        from_name: formData.fullName,
         from_email: formData.email,
-        company:    formData.company,
-        phone:      formData.phone,
-        service:    formData.service,
-        message:    formData.message,
+        company: formData.company,
+        phone: formData.phone,
+        service: formData.service,
+        message: formData.message,
       };
 
-      // Send booking confirmation to the client's email
-      const result = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_CONFIRM,
-        payload,
-        EMAILJS_PUBLIC_KEY,
-      );
-
-      console.log('EmailJS success:', result.status, result.text);
+      // Send booking confirmation to the client only
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CONFIRM, payload, EMAILJS_PUBLIC_KEY);
 
       setSuccess(true);
       setFormData({
@@ -78,11 +70,9 @@ export default function Contact() {
 
       window.setTimeout(() => navigate('/dashboard'), 1800);
     } catch (submissionError) {
-      console.error('EmailJS error:', submissionError);
-      setError(`Failed to send: ${submissionError?.text || submissionError?.message || 'unknown error'}`);
+      setError('Failed to send. Please try again or email us directly.');
     } finally {
       setLoading(false);
-
     }
   };
 
