@@ -1,204 +1,156 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ThreeBackground from '../components/ThreeBackground';
 
 const engagements = [
-  { project: 'Supply Chain Audit — Acme Corp', service: 'Supply Chain Management', status: 'In Progress', date: 'Mar 15, 2025' },
-  { project: 'Vendor Optimization — TechForce', service: 'Vendor Development', status: 'In Progress', date: 'Feb 01, 2025' },
-  { project: 'Procurement Strategy — Global Industries', service: 'Procurement Strategy', status: 'Completed', date: 'Dec 10, 2024' },
-  { project: 'Six Sigma Initiative — Manufacturing Plus', service: 'Process Excellence', status: 'Scheduled', date: 'May 01, 2025' },
-  { project: 'ESG Assessment — Retail Solutions', service: 'ESG & Sustainability', status: 'In Progress', date: 'Mar 20, 2025' },
+  { project: 'Supply Chain Audit — Acme Corp',             service: 'Supply Chain Management', status: 'In Progress', date: 'Mar 15, 2025', progress: 65  },
+  { project: 'Vendor Optimization — TechForce',            service: 'Vendor Development',      status: 'In Progress', date: 'Feb 01, 2025', progress: 40  },
+  { project: 'Procurement Strategy — Global Industries',   service: 'Procurement Strategy',    status: 'Completed',   date: 'Dec 10, 2024', progress: 100 },
+  { project: 'Six Sigma Initiative — Manufacturing Plus',  service: 'Process Excellence',      status: 'Scheduled',   date: 'May 01, 2025', progress: 0   },
+  { project: 'ESG Assessment — Retail Solutions',          service: 'ESG & Sustainability',    status: 'In Progress', date: 'Mar 20, 2025', progress: 55  },
 ];
 
-const statusStyle = {
-  'In Progress': { bg: 'rgba(29,111,164,0.1)', color: '#1D6FA4' },
-  Completed: { bg: 'rgba(29,111,164,0.12)', color: '#155d8a' },
-  Scheduled: { bg: 'rgba(11,31,58,0.08)', color: '#5A6B7A' },
+/* Dual-tone only: all statuses use shades of blue */
+const STATUS = {
+  'In Progress': { bg: 'rgba(21,101,192,0.12)', color: 'var(--ac)',       border: 'rgba(21,101,192,0.25)' },
+  'Completed':   { bg: 'rgba(21,101,192,0.22)', color: 'var(--ac-light)', border: 'rgba(21,101,192,0.4)'  },
+  'Scheduled':   { bg: 'rgba(11,31,58,0.18)',   color: 'var(--tx-muted)', border: 'rgba(77,100,140,0.25)' },
 };
 
-function ESGCalculator() {
-  const [inputs, setInputs] = useState({ energy: 5000, trips: 200, diversity: 50, recycling: 60 });
-  const [result, setResult] = useState(null);
+const STAT_CARDS = [
+  { label: 'Active Projects', value: '3',      meta: '+1 this month'      },
+  { label: 'Pending Reports', value: '1',      meta: 'Due in 3 days'      },
+  { label: 'ESG Score',       value: '74/100', meta: '+6 vs last quarter' },
+  { label: 'Next Meeting',    value: 'Apr 28', meta: 'In 2 days'          },
+];
 
-  const update = (key, value) => setInputs((previous) => ({ ...previous, [key]: Number(value) }));
+const ACTIONS = [
+  { num: '01', label: 'Book a Consultation', sub: 'Speak with a supply chain expert — free 30-minute session.',    path: '/contact',      cta: 'Schedule Now'  },
+  { num: '02', label: 'Browse Services',     sub: 'Explore our full capability set across 7 service areas.',       path: '/services',     cta: 'View Services' },
+  { num: '03', label: 'Read Case Studies',   sub: 'Real results we have delivered across sectors and geographies.', path: '/case-studies', cta: 'View Stories'  },
+];
 
-  const calculate = () => {
-    const energyScore = Math.max(0, 100 - inputs.energy / 100);
-    const tripScore = Math.max(0, 100 - inputs.trips / 3);
-    const total = Math.round(energyScore * 0.3 + tripScore * 0.2 + inputs.diversity * 0.25 + inputs.recycling * 0.25);
-    const rating = total >= 70 ? 'Good' : total >= 40 ? 'Fair' : 'Needs Work';
-    const recommendations = [];
-
-    if (energyScore < 60) recommendations.push('Switch to renewable energy sources and audit high-consumption assets.');
-    if (tripScore < 60) recommendations.push('Consolidate shipments and optimise delivery routes to reduce trip count.');
-    if (inputs.diversity < 50) recommendations.push('Expand supplier diversity program — target 60%+ diverse spend.');
-    if (inputs.recycling < 50) recommendations.push('Establish formal waste-diversion targets with your logistics partners.');
-
-    setResult({ total, rating, recs: recommendations.slice(0, 3) });
-  };
-
-  const sliders = [
-    { key: 'energy', label: 'Monthly Energy Consumption', unit: 'kWh', min: 0, max: 20000, step: 500, value: inputs.energy },
-    { key: 'trips', label: 'Logistics Trips / Month', unit: 'trips', min: 0, max: 1000, step: 10, value: inputs.trips },
-    { key: 'diversity', label: 'Supplier Diversity Score', unit: '/100', min: 0, max: 100, step: 5, value: inputs.diversity },
-    { key: 'recycling', label: 'Waste Recycling Rate', unit: '%', min: 0, max: 100, step: 5, value: inputs.recycling },
-  ];
-
-  return (
-    <div>
-      <p style={{ fontSize: '0.875rem', color: 'var(--tx-muted)', marginBottom: '32px', lineHeight: 1.65 }}>
-        Adjust the sliders to reflect your operations. Your ESG score updates instantly and provides actionable recommendations.
-      </p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', marginBottom: '28px' }}>
-        {sliders.map((slider) => (
-          <div key={slider.key}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--tx-body)' }}>{slider.label}</label>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ac)' }}>{slider.value} {slider.unit}</span>
-            </div>
-            <input
-              type="range"
-              min={slider.min}
-              max={slider.max}
-              step={slider.step}
-              value={slider.value}
-              onChange={(event) => update(slider.key, event.target.value)}
-              style={{ width: '100%', accentColor: 'var(--ac)' }}
-            />
-          </div>
-        ))}
-      </div>
-
-      <button onClick={calculate} className="btn btn-primary" style={{ width: '100%', padding: '12px' }}>
-        Calculate ESG Score
-      </button>
-
-      {result && (
-        <div style={{ marginTop: '28px', padding: '28px', background: 'var(--ac-tint)', border: '1px solid var(--ac-border)', borderRadius: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '3.2rem', fontWeight: 800, color: 'var(--ac)', lineHeight: 1 }}>{result.total}</p>
-              <p style={{ fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--tx-muted)', marginTop: '4px' }}>ESG Score</p>
-            </div>
-            <div>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.3rem', fontWeight: 700, color: 'var(--tx-primary)', marginBottom: '4px' }}>{result.rating}</p>
-              <p style={{ fontSize: '0.82rem', color: 'var(--tx-muted)' }}>Out of 100 — based on your inputs</p>
-            </div>
-          </div>
-          {result.recs.length > 0 && (
-            <>
-              <p style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--tx-muted)', marginBottom: '12px' }}>
-                Recommendations
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {result.recs.map((recommendation) => (
-                  <li key={recommendation} style={{ fontSize: '0.855rem', color: 'var(--tx-body)', paddingLeft: '16px', borderLeft: '2px solid var(--ac)', lineHeight: 1.6 }}>
-                    {recommendation}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
+const TABS = [
+  { key: 'overview', label: 'Engagements'    },
+  { key: 'esg',      label: 'ESG Calculator' },
+  { key: 'actions',  label: 'Quick Actions'  },
+];
 
 export default function Dashboard() {
   const [tab, setTab] = useState('overview');
 
-  const statCards = [
-    { label: 'Active Projects', value: '3', icon: 'AP' },
-    { label: 'Pending Reports', value: '1', icon: 'PR' },
-    { label: 'ESG Score', value: '74', icon: 'ESG' },
-    { label: 'Next Meeting', value: 'Apr 28', icon: 'MTG' },
-  ];
-
-  const tabs = [
-    { key: 'overview', label: 'Engagements' },
-    { key: 'esg', label: 'ESG Calculator' },
-    { key: 'actions', label: 'Quick Actions' },
-  ];
-
-  const actions = [
-    { label: 'Book a Consultation', sub: 'Speak with a supply chain expert', path: '/contact', cta: 'Schedule Now' },
-    { label: 'Browse Services', sub: 'Explore our full capability set', path: '/services', cta: 'View Services' },
-    { label: 'Read Case Studies', sub: "See results we've delivered", path: '/case-studies', cta: 'View Stories' },
-  ];
-
   return (
     <main style={{ background: 'var(--bg-page)', minHeight: '100vh', paddingTop: '64px' }}>
-      <div style={{ background: 'var(--bg-dark)', padding: '32px', paddingTop: '40px', borderBottom: '1px solid rgba(242,240,236,0.08)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <p style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--ac)', marginBottom: '6px' }}>Client Portal</p>
-          <h1 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '2rem', fontWeight: 800, color: 'var(--tx-light)', marginBottom: '4px' }}>Welcome back, Rahul S.</h1>
-          <p style={{ color: 'var(--tx-light-dim)', fontSize: '0.9rem' }}>Here&apos;s a snapshot of your active engagements and performance metrics.</p>
+
+      {/* ── HEADER with Three.js ── */}
+      <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-dark)', borderBottom: '1px solid rgba(77,166,232,0.1)', padding: '40px 32px 36px' }}>
+        <ThreeBackground particleCount={55} color="#1565c0" opacity={0.3} speed={0.55} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(77,166,232,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(77,166,232,0.045) 1px, transparent 1px)', backgroundSize: '56px 56px', pointerEvents: 'none' }} />
+
+        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+          <div>
+            <p style={{ fontSize: '0.64rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--ac-light)', marginBottom: '8px' }}>Client Portal</p>
+            <h1 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 900, color: 'var(--tx-light)', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: '6px' }}>Welcome back, Rahul S.</h1>
+            <p style={{ color: 'var(--tx-light-dim)', fontSize: '0.88rem', lineHeight: 1.6 }}>Snapshot of your active engagements and performance metrics.</p>
+          </div>
+
+          {/* Book Consultation — header CTA */}
+          <Link to="/contact">
+            <button style={{ background: 'var(--ac)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.15)', borderRadius: '10px', padding: '11px 24px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', letterSpacing: '0.01em', boxShadow: 'var(--sh-blue)', transition: 'transform 0.18s ease, box-shadow 0.18s ease', whiteSpace: 'nowrap' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 28px rgba(21,101,192,0.45)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sh-blue)'; }}>
+              Book Free Consultation
+            </button>
+          </Link>
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
-          {statCards.map((card) => (
-            <div key={card.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '20px 22px' }}>
-              <div style={{ width: '34px', height: '34px', background: 'var(--ac-tint)', border: '1px solid var(--ac-border)', borderRadius: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', fontWeight: 800, color: 'var(--ac)', letterSpacing: '0.03em', marginBottom: '14px', fontFamily: 'DM Sans, sans-serif' }}>
-                {card.icon}
+      {/* ── BODY ── */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 32px' }}>
+
+        {/* STAT CARDS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '20px' }}>
+          {STAT_CARDS.map((card) => (
+            <div key={card.label}
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '12px', padding: '20px 22px', borderLeft: '3px solid var(--ac)', transition: 'transform 0.18s, box-shadow 0.18s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'var(--sh)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+              <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--tx-muted)', marginBottom: '10px' }}>{card.label}</p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.9rem', fontWeight: 900, color: 'var(--tx-primary)', letterSpacing: '-0.025em', lineHeight: 1, marginBottom: '8px' }}>{card.value}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--ac)', flexShrink: 0 }} />
+                <p style={{ fontSize: '0.72rem', color: 'var(--tx-muted)', fontWeight: 500 }}>{card.meta}</p>
               </div>
-              <p style={{ fontSize: '0.78rem', color: 'var(--tx-muted)', marginBottom: '4px' }}>{card.label}</p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.8rem', fontWeight: 800, color: 'var(--tx-primary)', lineHeight: 1 }}>{card.value}</p>
             </div>
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-alt)', borderRadius: '8px', padding: '4px', marginBottom: '28px', width: 'fit-content' }}>
-          {tabs.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setTab(item.key)}
-              style={{
-                padding: '8px 18px',
-                borderRadius: '6px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                background: tab === item.key ? 'var(--bg-card)' : 'transparent',
-                color: tab === item.key ? 'var(--tx-primary)' : 'var(--tx-muted)',
-                boxShadow: tab === item.key ? 'var(--sh-sm)' : 'none',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              {item.label}
+        {/* FREE CONSULTATION BANNER */}
+        <div style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-dark)', border: '1px solid rgba(77,166,232,0.2)', borderLeft: '4px solid var(--ac)', borderRadius: '12px', padding: '22px 28px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          {/* Subtle grid inside banner */}
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(77,166,232,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(77,166,232,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none', borderRadius: '12px' }} />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <p style={{ fontSize: '0.64rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ac-light)', marginBottom: '5px' }}>Limited Availability This Week</p>
+            <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.1rem', fontWeight: 900, color: 'var(--tx-light)', letterSpacing: '-0.01em', lineHeight: 1.2, marginBottom: '4px' }}>Book a Free Consultation</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--tx-light-dim)', lineHeight: 1.6 }}>30 minutes with a supply chain expert — no commitment required.</p>
+          </div>
+          <Link to="/contact" style={{ position: 'relative', zIndex: 1 }}>
+            <button style={{ background: 'var(--ac)', color: '#fff', border: 'none', borderRadius: '9px', padding: '11px 24px', fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer', boxShadow: 'var(--sh-blue)', transition: 'transform 0.18s, box-shadow 0.18s', whiteSpace: 'nowrap' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(21,101,192,0.45)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sh-blue)'; }}>
+              Schedule Now →
+            </button>
+          </Link>
+        </div>
+
+        {/* TABS */}
+        <div style={{ display: 'flex', gap: '2px', background: 'var(--bg-alt)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '4px', marginBottom: '20px', width: 'fit-content' }}>
+          {TABS.map((t) => (
+            <button key={t.key} onClick={() => setTab(t.key)}
+              style={{ padding: '8px 22px', borderRadius: '7px', border: 'none', cursor: 'pointer', fontSize: '0.84rem', fontWeight: 600, fontFamily: 'DM Sans, sans-serif', letterSpacing: '0.01em', transition: 'all 0.15s ease', background: tab === t.key ? 'var(--ac)' : 'transparent', color: tab === t.key ? '#fff' : 'var(--tx-muted)', boxShadow: tab === t.key ? 'var(--sh-blue)' : 'none' }}>
+              {t.label}
             </button>
           ))}
         </div>
 
+        {/* ── ENGAGEMENTS ── */}
         {tab === 'overview' && (
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--bdr)' }}>
-              <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.05rem', fontWeight: 700, color: 'var(--tx-primary)' }}>Active Engagements</h2>
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '14px', overflow: 'hidden', boxShadow: 'var(--sh-sm)' }}>
+            <div style={{ padding: '18px 26px', borderBottom: '1px solid var(--bdr)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', fontWeight: 800, color: 'var(--tx-primary)', letterSpacing: '-0.01em' }}>Active Engagements</h2>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--ac)', background: 'var(--ac-tint)', border: '1px solid var(--ac-border)', padding: '3px 10px', borderRadius: '6px', letterSpacing: '0.06em' }}>{engagements.length} PROJECTS</span>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: 'var(--bg-alt)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--tx-muted)' }}>
-                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Project</th>
-                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Service</th>
-                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Status</th>
-                    <th style={{ padding: '12px 24px', textAlign: 'left', fontWeight: 700 }}>Started</th>
+                  <tr style={{ background: 'var(--bg-alt)', fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tx-muted)' }}>
+                    {['Project', 'Service', 'Progress', 'Status', 'Started'].map((h) => (
+                      <th key={h} style={{ padding: '11px 24px', textAlign: 'left', fontWeight: 700 }}>{h}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {engagements.map((engagement) => (
-                    <tr key={engagement.project} style={{ borderBottom: '1px solid var(--bdr)', fontSize: '0.875rem' }}>
-                      <td style={{ padding: '16px 24px', color: 'var(--tx-primary)', fontWeight: 500 }}>{engagement.project}</td>
-                      <td style={{ padding: '16px 24px', color: 'var(--tx-muted)' }}>{engagement.service}</td>
-                      <td style={{ padding: '16px 24px' }}>
-                        <span style={{ background: statusStyle[engagement.status].bg, color: statusStyle[engagement.status].color, padding: '3px 12px', borderRadius: '999px', fontSize: '0.78rem', fontWeight: 600 }}>
-                          {engagement.status}
+                  {engagements.map((eng) => (
+                    <tr key={eng.project}
+                      style={{ borderBottom: '1px solid var(--bdr)', fontSize: '0.865rem', transition: 'background 0.12s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-alt)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      <td style={{ padding: '15px 24px', color: 'var(--tx-primary)', fontWeight: 600 }}>{eng.project}</td>
+                      <td style={{ padding: '15px 24px', color: 'var(--tx-muted)', whiteSpace: 'nowrap' }}>{eng.service}</td>
+                      <td style={{ padding: '15px 24px', minWidth: '140px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                          <div style={{ flex: 1, height: '4px', background: 'var(--bg-alt)', borderRadius: '999px', overflow: 'hidden', border: '1px solid var(--bdr)' }}>
+                            <div style={{ height: '100%', width: `${eng.progress}%`, background: 'var(--ac)', borderRadius: '999px', transition: 'width 0.7s cubic-bezier(0.22,1,0.36,1)' }} />
+                          </div>
+                          <span style={{ fontSize: '0.7rem', color: 'var(--ac)', fontWeight: 700, minWidth: '30px' }}>{eng.progress}%</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '15px 24px' }}>
+                        <span style={{ background: STATUS[eng.status].bg, color: STATUS[eng.status].color, border: `1px solid ${STATUS[eng.status].border}`, padding: '3px 12px', borderRadius: '999px', fontSize: '0.73rem', fontWeight: 700, letterSpacing: '0.03em' }}>
+                          {eng.status}
                         </span>
                       </td>
-                      <td style={{ padding: '16px 24px', color: 'var(--tx-muted)' }}>{engagement.date}</td>
+                      <td style={{ padding: '15px 24px', color: 'var(--tx-muted)', whiteSpace: 'nowrap' }}>{eng.date}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -207,22 +159,54 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* ── ESG ── */}
         {tab === 'esg' && (
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '28px 32px' }}>
-            <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--tx-primary)', marginBottom: '4px' }}>ESG Performance Estimator</h2>
-            <ESGCalculator />
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '14px', overflow: 'hidden', boxShadow: 'var(--sh-sm)' }}>
+            <div style={{ background: 'var(--bg-dark)', borderBottom: '1px solid rgba(77,166,232,0.12)', padding: '36px 40px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(77,166,232,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(77,166,232,0.045) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <p style={{ fontSize: '0.64rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--ac-light)', marginBottom: '8px' }}>Free Assessment Tool</p>
+                <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 'clamp(1.2rem, 2.5vw, 1.7rem)', fontWeight: 900, color: 'var(--tx-light)', letterSpacing: '-0.02em', marginBottom: '10px' }}>ESG Performance Estimator</h2>
+                <p style={{ fontSize: '0.9rem', color: 'var(--tx-light-dim)', maxWidth: '520px', lineHeight: 1.65, marginBottom: '24px' }}>
+                  Calculate your supply chain ESG score across energy, logistics, supplier diversity, and waste — with prioritised improvement recommendations.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' }}>
+                  {['Carbon Footprint', 'Supplier Audits', 'Energy Efficiency', 'Circular Economy'].map(tag => (
+                    <span key={tag} style={{ background: 'rgba(77,166,232,0.1)', border: '1px solid rgba(77,166,232,0.22)', borderRadius: '999px', padding: '4px 13px', fontSize: '0.75rem', color: 'var(--ac-light)', fontWeight: 600 }}>{tag}</span>
+                  ))}
+                </div>
+                <Link to="/esg-calculator">
+                  <button style={{ background: 'var(--ac)', color: '#fff', border: 'none', borderRadius: '9px', padding: '12px 28px', fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '0.9rem', cursor: 'pointer', boxShadow: 'var(--sh-blue)', transition: 'transform 0.18s, box-shadow 0.18s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(21,101,192,0.45)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sh-blue)'; }}>
+                    Open ESG Calculator →
+                  </button>
+                </Link>
+              </div>
+            </div>
+            <div style={{ padding: '16px 40px', display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+              {['Free to use', 'No sign-up required', 'Results in under 2 minutes', 'GRI & CDP standards'].map(item => (
+                <span key={item} style={{ fontSize: '0.76rem', color: 'var(--tx-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--ac)', flexShrink: 0 }} />{item}
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
+        {/* ── QUICK ACTIONS ── */}
         {tab === 'actions' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-            {actions.map((action) => (
-              <div key={action.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderRadius: '10px', padding: '24px' }}>
-                <div style={{ width: '32px', height: '3px', background: 'var(--ac)', borderRadius: '2px', marginBottom: '16px' }} />
-                <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--tx-primary)', marginBottom: '8px' }}>{action.label}</h3>
-                <p style={{ fontSize: '0.845rem', color: 'var(--tx-muted)', marginBottom: '20px', lineHeight: 1.6 }}>{action.sub}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+            {ACTIONS.map((action) => (
+              <div key={action.label}
+                style={{ background: 'var(--bg-card)', border: '1px solid var(--bdr)', borderTop: '3px solid var(--ac)', borderRadius: '14px', padding: '28px', transition: 'transform 0.18s, box-shadow 0.18s' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sh-blue)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}>
+                <p style={{ fontSize: '0.64rem', fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ac)', marginBottom: '10px' }}>{action.num}</p>
+                <h3 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '1.05rem', color: 'var(--tx-primary)', marginBottom: '8px', letterSpacing: '-0.01em' }}>{action.label}</h3>
+                <p style={{ fontSize: '0.855rem', color: 'var(--tx-muted)', marginBottom: '22px', lineHeight: 1.65 }}>{action.sub}</p>
                 <Link to={action.path}>
-                  <button className="btn btn-outline" style={{ fontSize: '0.82rem', padding: '7px 16px' }}>{action.cta} →</button>
+                  <button className="btn btn-primary" style={{ fontSize: '0.84rem', padding: '9px 20px' }}>{action.cta} →</button>
                 </Link>
               </div>
             ))}

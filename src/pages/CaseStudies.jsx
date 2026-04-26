@@ -62,18 +62,28 @@ export default function CaseStudies() {
         breadcrumb="Case Studies"
       />
 
-      <section className="theme-surface border-b theme-border py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3">
+      <section style={{ background: 'var(--bg-section)', borderBottom: '1px solid var(--bdr)', padding: '16px 0' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {filters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`font-body px-6 py-2 rounded-full border transition-all duration-300 ${
-                  activeFilter === filter
-                    ? 'bg-[var(--text-primary)] text-[var(--text-on-dark)] border-[var(--text-primary)]'
-                    : 'theme-filter-pill'
-                }`}
+                style={{
+                  padding: '7px 20px',
+                  borderRadius: '999px',
+                  border: '1.5px solid',
+                  fontSize: '0.83rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  background: activeFilter === filter ? 'var(--ac)' : 'transparent',
+                  color: activeFilter === filter ? '#ffffff' : 'var(--tx-muted)',
+                  borderColor: activeFilter === filter ? 'var(--ac)' : 'var(--bdr-strong)',
+                  boxShadow: activeFilter === filter ? 'var(--sh-blue)' : 'none',
+                }}
+                onMouseEnter={e => { if (activeFilter !== filter) { e.currentTarget.style.borderColor = 'var(--ac)'; e.currentTarget.style.color = 'var(--ac)'; } }}
+                onMouseLeave={e => { if (activeFilter !== filter) { e.currentTarget.style.borderColor = 'var(--bdr-strong)'; e.currentTarget.style.color = 'var(--tx-muted)'; } }}
               >
                 {filter}
               </button>

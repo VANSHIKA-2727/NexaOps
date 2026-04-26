@@ -14,7 +14,7 @@ export default function Navbar({ theme, onToggleTheme }) {
     { label: 'Industries', path: '/industries' },
     { label: 'Case Studies', path: '/case-studies' },
     { label: 'Blog', path: '/blog' },
-    
+
     { label: 'Contact', path: '/contact' },
   ];
 
@@ -34,10 +34,9 @@ export default function Navbar({ theme, onToggleTheme }) {
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `font-body text-base transition-colors duration-300 pb-1 ${
-                    isActive
-                      ? 'theme-text-strong border-b-2 border-accent-500'
-                      : 'theme-nav-link'
+                  `font-body text-base transition-colors duration-300 pb-1 ${isActive
+                    ? 'theme-text-strong border-b-2 border-accent-500'
+                    : 'theme-nav-link'
                   }`
                 }
               >
@@ -46,7 +45,7 @@ export default function Navbar({ theme, onToggleTheme }) {
             ))}
           </div>
 
-          {/* Desktop CTA Button */}
+          {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-3">
             <button
               type="button"
@@ -55,17 +54,24 @@ export default function Navbar({ theme, onToggleTheme }) {
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               aria-pressed={theme === 'dark'}
             >
-             
               <span className="theme-toggle__label">
                 {theme === 'dark' ? 'Light' : 'Dark'}
               </span>
             </button>
-            <Button
-              label="Free Consultation"
-              variant="primary"
-              onClick={() => navigate('/contact')}
-              className="w-full sm:w-auto"
-            />
+            <Link to="/dashboard">
+              <Button
+                label="Get Started "
+                variant="outline"
+                className="w-full sm:w-auto"
+              />
+            </Link>
+            {/* <Link to="/contact">
+              <Button
+                label="Free Consultation"
+                variant="primary"
+                className="w-full sm:w-auto"
+              />
+            </Link> */}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -75,19 +81,16 @@ export default function Navbar({ theme, onToggleTheme }) {
             aria-label="Toggle menu"
           >
             <span
-              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${
-                isMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}
+              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''
+                }`}
             />
             <span
-              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${
-                isMenuOpen ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'
+                }`}
             />
             <span
-              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${
-                isMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}
+              className={`h-0.5 w-full theme-nav-icon transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                }`}
             />
           </button>
         </div>
@@ -116,10 +119,9 @@ export default function Navbar({ theme, onToggleTheme }) {
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `block py-3 px-2 font-body text-base transition-colors duration-300 ${
-                    isActive
-                      ? 'text-accent-500 font-semibold'
-                      : 'theme-nav-link'
+                  `block py-3 px-2 font-body text-base transition-colors duration-300 ${isActive
+                    ? 'text-accent-500 font-semibold'
+                    : 'theme-nav-link'
                   }`
                 }
                 onClick={() => setIsMenuOpen(false)}
@@ -133,7 +135,7 @@ export default function Navbar({ theme, onToggleTheme }) {
                 variant="primary"
                 onClick={() => {
                   setIsMenuOpen(false);
-                  navigate('/contact');
+                  navigate('/dashboard');
                 }}
                 className="w-full"
               />
